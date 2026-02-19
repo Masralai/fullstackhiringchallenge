@@ -78,7 +78,8 @@ function MathComponent({
                         onBlur();
                     }
                 }}
-                className="px-1 border rounded bg-background text-foreground font-mono text-sm outline-none focus:ring-1 focus:ring-primary inline-block min-w-[50px]"
+                style={{ width: `${Math.max(inputValue.length + 2, 5)}ch`, height: '1.5em' }}
+                className="px-1 py-0 border rounded bg-background text-foreground font-mono text-xs leading-none outline-none focus:ring-1 focus:ring-primary max-w-full align-middle"
             />
         );
     }
@@ -88,10 +89,11 @@ function MathComponent({
             ref={containerRef}
             onDoubleClick={onDoubleClick}
             title="Double click to edit equation"
-            className="math-node-container cursor-pointer hover:bg-muted p-1 rounded transition-colors inline-block"
+            className="math-node-container cursor-pointer hover:bg-muted p-1 rounded transition-colors inline-block align-middle"
             contentEditable={false}
         />
     );
+
 }
 
 export class MathNode extends DecoratorNode<React.JSX.Element> {
