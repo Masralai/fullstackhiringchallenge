@@ -21,6 +21,7 @@ import {
     $insertTableColumnAtSelection,
     $deleteTableRowAtSelection,
     $deleteTableColumnAtSelection,
+    $isTableCellNode,
 } from "@lexical/table";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,8 @@ import {
 import { INSERT_MATH_COMMAND } from "@/lib/editor/plugins/MathPlugin";
 import { useEditorStore } from "@/lib/store/use-editor-store";
 import { mergeRegister } from "@lexical/utils";
+import { $findMatchingParent } from "@lexical/utils";
+import { toast } from "sonner";
 
 export default function Toolbar() {
     const [editor] = useLexicalComposerContext();
@@ -119,6 +122,27 @@ export default function Toolbar() {
             });
             useEditorStore.getState().setContent(""); // Clear persisted store too
         }
+    };
+
+    const isInsideTableCell = (): boolean => {
+        let inside = false;
+        editor.getEditorState().read(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+                const node = selection.anchor.getNode();
+                const tableCell = $findMatchingParent(node, $isTableCellNode);
+                inside = tableCell !== null;
+            }
+        });
+        return inside;
+    };
+
+    const safeTableOp = (op: () => void) => {
+        if (!isInsideTableCell()) {
+            toast.error("Place your cursor inside a table cell first.");
+            return;
+        }
+        editor.update(op);
     };
 
     return (
@@ -242,7 +266,7 @@ export default function Toolbar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => editor.update(() => $insertTableRowAtSelection())}
+                                onClick={() => safeTableOp(() => $insertTableRowAtSelection())}
                                 className="h-8 w-8 text-blue-400"
                             >
                                 <div className="relative">
@@ -259,7 +283,7 @@ export default function Toolbar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => editor.update(() => $insertTableColumnAtSelection())}
+                                onClick={() => safeTableOp(() => $insertTableColumnAtSelection())}
                                 className="h-8 w-8 text-blue-400"
                             >
                                 <div className="relative">
@@ -276,7 +300,7 @@ export default function Toolbar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => editor.update(() => $deleteTableRowAtSelection())}
+                                onClick={() => safeTableOp(() => $deleteTableRowAtSelection())}
                                 className="h-8 w-8 text-red-400"
                             >
                                 <div className="relative">
@@ -293,7 +317,7 @@ export default function Toolbar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => editor.update(() => $deleteTableColumnAtSelection())}
+                                onClick={() => safeTableOp(() => $deleteTableColumnAtSelection())}
                                 className="h-8 w-8 text-red-400"
                             >
                                 <div className="relative">
