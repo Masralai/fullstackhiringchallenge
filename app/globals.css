@@ -157,7 +157,7 @@
   font-weight: bold;
 }
 
-/* Ensure the editor container can grow */
-.outline-none {
+/* Ensure only the main editor content area has min-height, not nested elements */
+.editor-content-area > .outline-none {
   min-height: 400px;
 }

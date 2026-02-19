@@ -129,7 +129,7 @@ export default function Editor() {
         <LexicalComposer initialConfig={initialConfig}>
             <div className="relative border rounded-lg shadow-sm bg-card overflow-hidden flex flex-col">
                 <Toolbar />
-                <div className="relative flex-grow">
+                <div className="editor-content-area relative flex-grow">
                     <RichTextPlugin
                         contentEditable={
                             <ContentEditable className="outline-none p-4 min-h-[400px] text-sm caret-primary bg-background" />

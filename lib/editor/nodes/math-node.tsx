@@ -78,7 +78,7 @@ function MathComponent({
                         onBlur();
                     }
                 }}
-                style={{ width: `${Math.max(inputValue.length + 2, 5)}ch`, height: `${Math.max(inputValue.length + 2, 5)}ch` }}
+                style={{ width: `${Math.max(inputValue.length + 2, 5)}ch`, height: '1.4em' }}
                 className="px-1 py-0 border rounded bg-background text-foreground font-mono text-xs leading-none outline-none focus:ring-1 focus:ring-primary max-w-full align-middle "
             />
         );
